@@ -1,1 +1,5 @@
-# coding-standards
+# Coding Standards
+
+## GIT
+
+####[Flow chuẩn](./git/flow.md)
