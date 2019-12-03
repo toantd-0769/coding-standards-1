@@ -3,7 +3,7 @@
 Flow tham khảo: [A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/)
 
 ### Giả định
-* Đã tạo Central Repository (Nguồn trung tâm) trên Github（hoặc Bitbucket）.
+* Đã tạo Central Repository (Nguồn trung tâm) trên Gitlab (Bitbucket, Github).
 * Branch mặc định của Central Repository là master.
 * Lập trình viên có thể  fork (tạo nhánh) đối với Central Repository.
 * Đã quyết định người review và người có quyền merge.
@@ -19,13 +19,13 @@ Flow tham khảo: [A successful Git branching model](http://nvie.com/posts/a-suc
         2. Trong trường hợp pull-request có 2 commit thì nội dung commit title của 2 commit sẽ tương ứng như sau
             * `Tạo method thực hiện việc clear cache trong Model`
             * `Tại controller gọi method ở Model để thực hiện việc clear cache`
-* Gitflow đến thời điểm 2018/03/28 có quy định là 1 pull-request chỉ một commit sẽ không còn hiệu lực nữa. Tuy nhiên với các dự án mà teamsize lớn hơn 10 người thì để nhằm mục đích cho thuận tiện cho việc confirm thì khuyến khích dùng squash and merge .
-* Ngoài ra thì với gitflow trước đây ( trước thời điểm 2018/03/28) thì có cho phép dùng force push, tuy nhiên do khi sử dụng force push sẽ xoá hết lịch sử thay đổi do vậy gitlow hiện tại không khuyến khích sử dụng force push. Trong trường hợp cần sử dụng force push thì cần có sự đồng thuận từ team.
+* Với các dự án mà teamsize lớn hơn 10 người thì để nhằm mục đích cho thuận tiện cho việc confirm thì khuyến khích dùng squash and merge .
+* Ngoài ra thì với gitflow trước đây có cho phép dùng force push, tuy nhiên do khi sử dụng force push sẽ xoá hết lịch sử thay đổi do vậy gitlow hiện tại không khuyến khích sử dụng force push. Trong trường hợp cần sử dụng force push thì cần có sự đồng thuận từ team.
 * Tại môi trường local(trên máy lập trình viên), tuyệt đối không được thay đổi code khi ở branch master.Nhất định phải thao tác trên branch khởi tạo để làm task.
 
 ### Chuẩn bị
 
-1. Trên Github (Bitbucket), fork Central Repository về tài khoản của mình（repository ở tài khoản của mình sẽ được gọi là Forked Repository）.
+1. Trên Gitlab (Bitbucket, Github), fork Central Repository về tài khoản của mình（repository ở tài khoản của mình sẽ được gọi là Forked Repository）.
 
 2. Clone (tạo bản sao) Forked Repository ở môi trường local.Tại thời điểm này, Forked Repository sẽ được tự động đăng ký dưới tên là `origin`.
     ```sh
@@ -41,6 +41,8 @@ Flow tham khảo: [A successful Git branching model](http://nvie.com/posts/a-suc
 ### Quy trình
 
 Từ đây, Central Repository và Forked Repository sẽ được gọi lần lượt là `upstream` và `origin`.
+
+**Đối với dự án yêu cầu chỉ được thao tác trên branch `develop`, branch `master` chỉ dùng cho việc release thì hãy gửi pull-request, fetch/pull code mới nhất với branch `develop` của upstream**
 
 1. Đồng bộ hóa branch master tại local với upstream.
     ```sh
@@ -62,7 +64,28 @@ Từ đây, Central Repository và Forked Repository sẽ được gọi lần l
     $ git push origin task/1234
     ```
 
-5. Tại origin trên Github（Bitbucket）、từ branch `task/1234` đã được push lên hãy gửi pull-request đối với branch master của upstream.
+5. Tại origin trên Github（Bitbucket）、từ branch `task/1234` đã được push lên hãy gửi pull-request đối với branch `master` của upstream.
+
+    **Trường hợp xảy ra conflict khi tạo pull-request**
+
+    5.1. Quay trở về branch master ở local và lấy code mới nhất về
+
+      ```sh
+      $ git checkout master
+      $ git pull upstream master
+      ```
+
+    5.2. Quay trở lại branch làm task, sau đó rebase với branch master.
+
+      ```sh
+      $ git checkout task/1234
+      $ git rebase master
+      ```
+    5.3. Push code lên origin.
+
+      ```sh
+      $ git push origin task/1234
+      ```
 
 6. Hãy gửi link URL của trang pull-request cho reviewer trên chatwork để tiến hành review code.
 
@@ -119,7 +142,7 @@ Từ đây, Central Repository và Forked Repository sẽ được gọi lần l
     $ git push origin task/1234
     ```
 
-8. Tại origin trên Github（Bitbucket）、từ branch `task/1234` đã được push lên hãy gửi pull-request đối với branch master của upstream.
+8. Tại origin trên Gitlab (Bitbucket, Github)、từ branch `task/1234` đã được push lên hãy gửi pull-request đối với branch master của upstream.
 
 9. Hãy gửi link URL của trang pull-request cho reviewer trên chatwork để tiến hành review code.
 
